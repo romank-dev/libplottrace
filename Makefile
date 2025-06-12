@@ -20,7 +20,7 @@ SRC_RELAY_CLIENT = src/client.cpp src/PlotRelayClient.cpp
 SRC_PLOT_CLIENT = src/cv_plot_client.cpp src/CvPlotHandler.cpp src/PlotRelayClient.cpp
 SRC_RELAY_SERVER = src/server.cpp src/PlotRelayServer.cpp 
 SRC_PUBLISH_TESTER = src/publish_test.cpp src/PlotRelayPublisher.cpp src/PlotRelayGlobal.cpp 
-SRC_PLOT_TESTER = src/cv_plot_test.cpp 
+SRC_PLOT_TESTER = src/cv_plot_test.cpp src/CvPlot.cpp
 SRC_LIB = src/PlotRelayGlobal.cpp src/PlotRelayPublisher.cpp src/PlotRelayClient.cpp
 
 OBJ_RELAY_CLIENT = $(SRC_RELAY_CLIENT:$(SRC_DIR)/%.cpp=$(G_OBJ)/$(PROJECT)/%.o)
