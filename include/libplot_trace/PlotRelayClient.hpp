@@ -15,9 +15,8 @@ limitations under the License.
 
 #pragma once
 
-#include <libcommon/libcommon.hpp>
-#include <libnet/TcpSocket.hpp>
 #include <libplot_trace/PlotRelayProtocol.hpp>
+#include <libnet/TcpSocket.hpp>
 
 class PlotRelayClient final : NonCopyable
 {
@@ -26,7 +25,7 @@ class PlotRelayClient final : NonCopyable
 
         const std::vector<std::string>& get_graphs();
 
-        bool receive_graph(uint32_t timeout_ms, PlotPacket& pkt);
+        void receive_graph(PlotPacket& pkt);
 
     private:
         TcpSocket                   _client;

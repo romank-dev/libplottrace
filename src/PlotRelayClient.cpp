@@ -22,11 +22,14 @@ limitations under the License.
 #include <libplot_trace/PlotRelayClient.hpp>
 
 
+#define CLIENT_RECEIVE_TIMEOUT_MS 1000
+
 using namespace std;
 
 PlotRelayClient::PlotRelayClient(const string& target_ip, const vector<string>& topics) :
-            _client(target_ip, DEFAULT_PLOT_RELAY_PORT)
+    _client(IpSocketAddress(target_ip, DEFAULT_PLOT_RELAY_PORT), 1000)
 {
+    _client.set_receive_timeout(1000);
     string graphs_str;
     for(const auto& topic : topics)
     {
@@ -56,17 +59,8 @@ const vector<string>& PlotRelayClient::get_graphs()
     return _graphs_snapshot;
 }
 
-bool PlotRelayClient::receive_graph(uint32_t timeout_ms, PlotPacket& pkt)
+void PlotRelayClient::receive_graph(PlotPacket& pkt)
 {
-    if(timeout_ms != -1U)
-    {
-        if(!_client.receive(&pkt, sizeof(pkt), timeout_ms))
-            return false;
-    }
-    else
-    {
-        _client.receive(&pkt, sizeof(pkt));
-    }
-    return true;
+    _client.receive(&pkt, sizeof(pkt));
 }
 

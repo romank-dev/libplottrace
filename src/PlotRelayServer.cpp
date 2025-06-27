@@ -186,7 +186,7 @@ void PlotRelayServer::tcp_server_loop(Thread& t)
 }
 
 
-PlotRelayServer::ClientInfo::ClientInfo(const TcpSocketPtr& socket, const vector<std::string>& graphs) :
+PlotRelayServer::ClientInfo::ClientInfo(const TcpSocket::sptr& socket, const vector<std::string>& graphs) :
     _socket(socket),
     _requested_graphs(graphs),
     _last_send_time(0),
@@ -194,7 +194,7 @@ PlotRelayServer::ClientInfo::ClientInfo(const TcpSocketPtr& socket, const vector
 {}
 
 
-TcpSocketPtr& PlotRelayServer::ClientInfo::socket()
+TcpSocket::sptr& PlotRelayServer::ClientInfo::socket()
 {
     return _socket;
 }

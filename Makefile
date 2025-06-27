@@ -56,27 +56,27 @@ endif
 
 $(G_BIN)/$(PROJECT)/client_gui: $(OBJ_PLOT_CLIENT)
 	@echo "\033[0;32m [LINK] $@ \033[0;0m"
-	g++ -o $@ $^ $(LDFLAGS) $(G_LDFLAGS) $(LDFLAGS_OPENCV) -lnet
+	@g++ -o $@ $^ $(LDFLAGS) $(G_LDFLAGS) $(LDFLAGS_OPENCV) -lnet
 	
 $(G_BIN)/$(PROJECT)/client_console: $(OBJ_RELAY_CLIENT)
 	@echo "\033[0;32m [LINK] $@ \033[0;0m"
-	g++ -o $@ $^ $(LDFLAGS) $(G_LDFLAGS) -lnet
+	@g++ -o $@ $^ $(LDFLAGS) $(G_LDFLAGS) -lnet
 	
 $(G_BIN)/$(PROJECT)/plot_relay: $(OBJ_RELAY_SERVER)
 	@echo "\033[0;32m [LINK] $@ \033[0;0m"
-	g++ -o $@ $^ $(LDFLAGS) $(G_LDFLAGS) -lnet
+	@g++ -o $@ $^ $(LDFLAGS) $(G_LDFLAGS) -lnet
 
 $(G_BIN)/$(PROJECT)/test_gui: $(OBJ_PLOT_TESTER)
 	@echo "\033[0;32m [LINK] $@ \033[0;0m"
-	g++ -o $@ $^ $(LDFLAGS) $(G_LDFLAGS) $(LDFLAGS_OPENCV) -lnet
+	@g++ -o $@ $^ $(LDFLAGS) $(G_LDFLAGS) $(LDFLAGS_OPENCV) -lnet
 	
 $(G_BIN)/$(PROJECT)/test_plot_publish: $(OBJ_PUBLISH_TESTER)
 	@echo "\033[0;32m [LINK] $@ \033[0;0m"
-	g++ -o $@ $^ $(LDFLAGS) $(G_LDFLAGS) $(LDFLAGS_OPENCV) -lnet
+	@g++ -o $@ $^ $(LDFLAGS) $(G_LDFLAGS) $(LDFLAGS_OPENCV) -lnet
 
 $(G_BIN)/libplot_relay.so: $(OBJ_LIB)
 	@echo "\033[0;32m [LINK] $@ \033[0;0m"
-	g++ -shared -o $@ $^ $(LDFLAGS) -lnet
+	@g++ -shared -o $@ $^ $(LDFLAGS) -lnet
 
 -include $(DEP_RELAY_CLIENT)
 -include $(DEP_PLOT_CLIENT)

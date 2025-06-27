@@ -16,9 +16,9 @@ limitations under the License.
 
 #pragma once
 #include <map>
+#include <libnet/TcpSocket.hpp>
 #include <libcommon/libcommon.hpp>
 #include <libnet/TcpServerSocket.hpp>
-#include <libnet/TcpSocket.hpp>
 #include <libplot_trace/PlotRelayProtocol.hpp>
 
 class PlotRelayServer final : NonCopyable
@@ -40,22 +40,22 @@ class PlotRelayServer final : NonCopyable
     class ClientInfo
     {
         public:
-            ClientInfo(const TcpSocketPtr& socket, const std::vector<std::string>& graphs);
+            ClientInfo(const TcpSocket::sptr& socket, const std::vector<std::string>& graphs);
 
-            TcpSocketPtr& socket();
+            TcpSocket::sptr& socket();
             std::vector<std::string>& requested_graphs();
             uint32_t& last_send_time();
             uint32_t& last_send_duration();
 
         private:
-            TcpSocketPtr                _socket;
+            TcpSocket::sptr             _socket;
             std::vector<std::string>    _requested_graphs;
             uint32_t                    _last_send_time;
             uint32_t                    _last_send_duration;
     };
 
     private:
-        Stopwatch                                       _timer;
+        Stopwatch                                   _timer;
         int                                         _pipe_fd;
         ThreadSafe<std::vector<ClientInfo>>         _clients;
         TcpServerSocket                             _server;

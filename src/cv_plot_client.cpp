@@ -168,9 +168,8 @@ int main(int argc, char** argv)
 
         while(1)
         {
-            PlotPacket pkt, sink;
-            if(!client.receive_graph(-1, pkt))
-                break;
+            PlotPacket pkt;
+            client.receive_graph(pkt);
 
             if (first)
             {

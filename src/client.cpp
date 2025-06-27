@@ -136,8 +136,7 @@ int main(int argc, char** argv)
         while(1)
         {
             PlotPacket pkt, sink;
-            if(!client.receive_graph(-1, paused ? sink : pkt))
-                break;
+            client.receive_graph(paused ? sink : pkt);
 
             if(!first)
                 printf("\r\033[F\033[K\r\033[F\033[K\r\033[F\033[K");
