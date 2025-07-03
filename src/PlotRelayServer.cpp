@@ -26,7 +26,7 @@ using namespace std;
 using std::placeholders::_1;
 
 PlotRelayServer::PlotRelayServer() :
-    _server(DEFAULT_PLOT_RELAY_PORT),
+    _server(IpSocketAddress(IpAddress::AnyAddress, DEFAULT_PLOT_RELAY_PORT), true),
     _acceptor_thread(bind(&PlotRelayServer::tcp_server_loop, this, _1)),
     _pipe_fd(socket(AF_UNIX, SOCK_DGRAM, 0))
 {
@@ -133,7 +133,7 @@ void PlotRelayServer::tcp_server_loop(Thread& t)
 {
     while(!t.should_quit())
     {
-        auto client_sock = _server.accept_connection();
+        TcpSocket::sptr client_sock = _server.accept_connection();
         static const int SMALL_TOLERANCE_FOR_SEND = 500;
         client_sock->set_send_timeout(SMALL_TOLERANCE_FOR_SEND);
         client_sock->set_receive_timeout(SMALL_TOLERANCE_FOR_SEND);

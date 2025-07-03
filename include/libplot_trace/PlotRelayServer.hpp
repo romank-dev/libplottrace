@@ -16,9 +16,8 @@ limitations under the License.
 
 #pragma once
 #include <map>
-#include <libnet/TcpSocket.hpp>
+#include <libnet/libnet.hpp>
 #include <libcommon/libcommon.hpp>
-#include <libnet/TcpServerSocket.hpp>
 #include <libplot_trace/PlotRelayProtocol.hpp>
 
 class PlotRelayServer final : NonCopyable
