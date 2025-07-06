@@ -20,12 +20,30 @@ limitations under the License.
 #include <libcommon/libcommon.hpp>
 #include <libplot_trace/PlotRelayProtocol.hpp>
 
+/**
+ * @class PlotRelayServer
+ * @brief A broker between plot data publishers and plot data clients.
+ *
+ * The `PlotRelayServer` class manages TCP client connections that request
+ * graph data, listens on the plot UNIX socket for packets from plot publishers,
+ * and distributes plot data that is relevant to each client.
+ */
 class PlotRelayServer final : NonCopyable
 {
     public:
+        /**
+        * @brief Constructs a new `PlotRelayServer` object.
+        */
         PlotRelayServer();
+
+        /**
+         * @brief Destroys the `PlotRelayServer` object.
+         */
         ~PlotRelayServer();
 
+        /**
+         * @brief Starts the main server loop.
+         */
         void run_loop();
 
     private:

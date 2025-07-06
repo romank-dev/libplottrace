@@ -45,7 +45,7 @@ int main(int argc, char** argv)
         this_thread::sleep_for(std::chrono::milliseconds(10));
         for(const auto& topic : topics)
         {
-            TRACE_PLOT(topic.c_str(), stamp, "sin(stamp)", sin(stamp), "cos(stamp)", cos(stamp), "tan(stamp)", tan(stamp), "sqrt(stamp)", sqrt(stamp));
+            TRACE_PLOT(topic.c_str(), stamp, "sin(timestamp)", sin(stamp), "cos(timestamp)", cos(stamp), "sin(2*timestamp)", sin(2*stamp), "sqrt(cos(t))", sin(cos(stamp)));
         }
         stamp += 0.01f;
     }

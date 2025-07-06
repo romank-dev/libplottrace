@@ -29,22 +29,22 @@ PlotRelayPublisher::PlotRelayPublisher() :
     CHECK_THROW_POSIX(_fd >= 0, "socket() failed!");
 }
 
-void PlotRelayPublisher::publish(const char* graph_name, uint32_t graph_name_len, float stamp, const char* curve_1, uint32_t curve_1_len, float value_1, const char* curve_2, uint32_t curve_2_len, float value_2, const char* curve_3, uint32_t curve_3_len, float value_3)
+void PlotRelayPublisher::publish(const char* graph_name, size_t graph_name_len, float stamp, const char* curve_1, size_t curve_1_len, float value_1, const char* curve_2, size_t curve_2_len, float value_2, const char* curve_3, size_t curve_3_len, float value_3)
 {
     publish(graph_name, graph_name_len, stamp, curve_1, curve_1_len, value_1, curve_2, curve_2_len, value_2, curve_3, curve_3_len, value_3, nullptr, 0, 0);
 }
 
-void PlotRelayPublisher::publish(const char* graph_name, uint32_t graph_name_len, float stamp, const char* curve_1, uint32_t curve_1_len, float value_1, const char* curve_2, uint32_t curve_2_len, float value_2)
+void PlotRelayPublisher::publish(const char* graph_name, size_t graph_name_len, float stamp, const char* curve_1, size_t curve_1_len, float value_1, const char* curve_2, size_t curve_2_len, float value_2)
 {
     publish(graph_name, graph_name_len, stamp, curve_1, curve_1_len, value_1, curve_2, curve_2_len, value_2, nullptr, 0, 0, nullptr, 0, 0);
 }
 
-void PlotRelayPublisher::publish(const char* graph_name, uint32_t graph_name_len, float stamp, const char* curve_1, uint32_t curve_1_len, float value_1)
+void PlotRelayPublisher::publish(const char* graph_name, size_t graph_name_len, float stamp, const char* curve_1, size_t curve_1_len, float value_1)
 {
     publish(graph_name, graph_name_len, stamp, curve_1, curve_1_len, value_1, nullptr, 0, 0, nullptr, 0, 0, nullptr, 0, 0);
 }
 
-void PlotRelayPublisher::publish(const char* graph_name, uint32_t graph_name_len, float stamp, const char* curve_1, uint32_t curve_1_len, float value_1, const char* curve_2, uint32_t curve_2_len, float value_2, const char* curve_3, uint32_t curve_3_len, float value_3, const char* curve_4, uint32_t curve_4_len, float value_4)
+void PlotRelayPublisher::publish(const char* graph_name, size_t graph_name_len, float stamp, const char* curve_1, size_t curve_1_len, float value_1, const char* curve_2, size_t curve_2_len, float value_2, const char* curve_3, size_t curve_3_len, float value_3, const char* curve_4, size_t curve_4_len, float value_4)
 {
     struct sockaddr_un name;
     name.sun_family = AF_UNIX;
@@ -58,6 +58,7 @@ void PlotRelayPublisher::publish(const char* graph_name, uint32_t graph_name_len
 
     if(curve_1 != nullptr)
     {
+        curve_1_len = min(curve_1_len, TEXT_LEN);
         payload_writer.write(curve_1, curve_1_len);
         payload_writer.skip(TEXT_LEN-curve_1_len);
         payload_writer.write(value_1);
@@ -66,6 +67,7 @@ void PlotRelayPublisher::publish(const char* graph_name, uint32_t graph_name_len
 
     if(curve_2 != nullptr)
     {
+        curve_2_len = min(curve_2_len, TEXT_LEN);
         payload_writer.write(curve_2, curve_2_len);
         payload_writer.skip(TEXT_LEN-curve_2_len);
         payload_writer.write(value_2);
@@ -74,6 +76,7 @@ void PlotRelayPublisher::publish(const char* graph_name, uint32_t graph_name_len
 
     if(curve_3 != nullptr)
     {
+        curve_3_len = min(curve_3_len, TEXT_LEN);
         payload_writer.write(curve_3, curve_3_len);
         payload_writer.skip(TEXT_LEN-curve_3_len);
         payload_writer.write(value_3);
@@ -82,6 +85,7 @@ void PlotRelayPublisher::publish(const char* graph_name, uint32_t graph_name_len
 
     if(curve_4 != nullptr)
     {
+        curve_4_len = min(curve_4_len, TEXT_LEN);
         payload_writer.write(curve_4, curve_4_len);
         payload_writer.skip(TEXT_LEN-curve_4_len);
         payload_writer.write(value_4);

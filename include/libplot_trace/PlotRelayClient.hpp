@@ -18,13 +18,36 @@ limitations under the License.
 #include <libplot_trace/PlotRelayProtocol.hpp>
 #include <libnet/TcpSocket.hpp>
 
+/**
+ * @class PlotRelayClient
+ * @brief A client for communicating with the Plot Relay server.
+ *
+ * This class is responsible for connecting to a Plot Relay server, subscribing to specific topics,
+ * and receiving graph data packets.
+ */
 class PlotRelayClient final : NonCopyable
 {
     public:
+        /**
+         * @brief Constructs a PlotRelayClient instance.
+         *
+         * @param target_ip The IP address of the target Plot Relay server.
+         * @param topics A list of topics to subscribe to.
+         */
         explicit PlotRelayClient(const std::string& target_ip, const std::vector<std::string>& topics);
 
+        /**
+        * @brief Retrieves the current snapshot of available graphs.
+        *
+        * @return A reference to a vector containing the names of the graphs.
+        */
         const std::vector<std::string>& get_graphs();
 
+        /**
+         * @brief Receives a graph data packet from the server.
+         *
+         * @param pkt A reference to a PlotPacket object to store the received data.
+         */
         void receive_graph(PlotPacket& pkt);
 
     private:

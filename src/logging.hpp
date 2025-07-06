@@ -15,5 +15,5 @@ limitations under the License.
 
 #pragma once
 
-#include <libplot_trace/PlotRelayGlobal.hpp>
-#include <libplot_trace/PlotRelayClient.hpp>
+#define __COMPONENT__ "libplot_trace"
+#include <liblogtrace/liblogtrace.hpp>

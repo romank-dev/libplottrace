@@ -46,6 +46,8 @@
 //################################################################################
 
 #include <libplot_trace/CvPlot.hpp>
+#include <opencv2/imgproc.hpp>
+#include <opencv2/highgui.hpp>
 
 namespace cv
 {

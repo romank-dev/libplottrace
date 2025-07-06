@@ -21,6 +21,7 @@ limitations under the License.
 #include <unistd.h>
 #include <netinet/tcp.h>
 #include <libplot_trace/PlotRelayServer.hpp>
+#include "logging.hpp"
 
 using namespace std;
 using std::placeholders::_1;
@@ -79,7 +80,6 @@ void PlotRelayServer::handle_packet(const PlotPacket& packet)
             auto& client = clients[i];
             for(const auto& graph : client.requested_graphs())
             {
-//                printf("%s| %s|\n", graph.c_str(), packet.graph_name);
                 if(!strncmp(graph.c_str(), packet.graph_name, sizeof(packet.graph_name)))
                 {
                     // the if statement below protects us from overloading the client's send queue, which can
@@ -171,17 +171,13 @@ void PlotRelayServer::tcp_server_loop(Thread& t)
             client_sock->send(&graph_str_size, sizeof(graph_str_size));
             client_sock->send(result_graphs.c_str(), graph_str_size);
         }
-        catch(const std::exception& e)
+        catch(const Exception& e)
         {
-            printf("WTF\n;");
-            //TRACE(LEVEL_ERR,3691192320,1,0x6,"Failed to register relay client: %s",e.what());
+            TRACE_ERR("Exception during client registration: %s",e.full_message().c_str());
             continue;
         }
 
-        _clients.get([&](vector<ClientInfo>& clients)
-        {
-            clients.push_back(ClientInfo(client_sock, requested_graphs_list));
-        });
+        _clients->get().push_back(ClientInfo(client_sock, requested_graphs_list));
     }
 }
 

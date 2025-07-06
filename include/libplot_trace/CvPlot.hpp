@@ -45,11 +45,12 @@
 //
 //################################################################################
 
-
+/**
+ * The addition to this class is the support for multiple curves on the same plot space.
+ */
 #pragma once
 
 #include <opencv2/core.hpp>
-#include <opencv2/imgproc.hpp>
 #include <opencv2/highgui.hpp>
 
 namespace cv

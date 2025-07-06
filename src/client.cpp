@@ -16,6 +16,7 @@ limitations under the License.
 #include <libgen.h>
 #include <libcommon/libcommon.hpp>
 #include <thread>
+#include <iostream>
 #include <cstdio>
 #include <libplot_trace/PlotRelayClient.hpp>
 #include <libplot_trace/PlotRelayPublisher.hpp>
@@ -28,7 +29,7 @@ void usage()
     printf("USAGE: plot_relay_client [OPTIONS]\n\t-h\tspecify host (don't use detector)\n\t-q\tquery available plots\n\t-s [G]\t show single graph with name G\n");
 }
 
-int main(int argc, char** argv)
+int safe_main(int argc, char** argv)
 {
     Utils::FileSystem::set_local_cwd();
 
@@ -91,10 +92,10 @@ int main(int argc, char** argv)
         auto results = d.scan_and_collect(250);
         if(results.empty())
         {
-            printf("failed to auto-detect IVO\nFeel free to use plot_relay_client [IP]\n");
+            printf("failed to auto-detect server.\nFeel free to use plot_relay_client [IP]\n");
             return 0;
         }
-        printf("Auto-detected IVO at %s\n", results[0].second.c_str());
+        printf("Auto-detected server at %s\n", results[0].second.c_str());
         host = results[0].second;
     }
 
@@ -112,9 +113,10 @@ int main(int argc, char** argv)
     }
     else if(verb == "-s")
     {
-        PlotRelayClient client(host, {graph});
         bool first = true;
         bool paused = false;
+
+        std::unique_ptr<PlotRelayClient> client{new PlotRelayClient(host, {graph})};
 
         Thread stdin_handler([&paused](Thread& t)
         {
@@ -132,16 +134,25 @@ int main(int argc, char** argv)
                 }
             }
         });
-
         while(1)
         {
             PlotPacket pkt, sink;
-            client.receive_graph(paused ? sink : pkt);
+            try
+            {
+                client->receive_graph(paused ? sink : pkt);
+            }
+            catch(const Exception& e)
+            {
+                client.reset(new PlotRelayClient(host, {graph}));
+                first = true;
+                printf("Not receiving data...\n");
+                continue;
+            }
 
             if(!first)
                 printf("\r\033[F\033[K\r\033[F\033[K\r\033[F\033[K");
 
-            printf("stamp: %f %s\n", pkt.stamp, paused ? "[PAUSED]" : "");
+            printf("timestamp: %f %s\n", pkt.stamp, paused ? "[PAUSED]" : "");
             printf("%s%-17s%s%-17s%s%-17s%s%-17s%s\n", fgnd_red, pkt.curve_1, fgnd_green, pkt.curve_2, fgnd_magenta, pkt.curve_3, fgnd_blue, pkt.curve_4, font_reset);
             printf("%s%s%-17f%s%-17f%s%-17f%s%-17f%s\n", fgnd_white, bgnd_red, pkt.value_1, bgnd_green, pkt.value_2, bgnd_magenta, pkt.value_3, bgnd_blue, pkt.value_4, font_reset);
             first = false;
@@ -153,3 +164,30 @@ int main(int argc, char** argv)
 
     return 0;
 }
+
+int main(int argc, char** argv)
+{
+    try
+    {
+        Exception::configure(true, true, true, true, true, 10);
+        safe_main(argc, argv);
+    }
+    catch(const Exception& e)
+    {
+        cout << "Application caught exception and will exit:\n\t" << e.full_message() << endl;
+    }
+    catch(const std::exception& e)
+    {
+        cout << "Application caught std::exception and will exit:\n\t" << e.what() << endl;
+    }
+    catch(...)
+    {
+        cout << "Application caught unknown exception and will exit" << endl;
+    }
+}
+
+
+
+
+
+

@@ -15,10 +15,29 @@ limitations under the License.
 
 #pragma once
 
-#define DEFAULT_PLOT_RELAY_PORT ((uint16_t)0x0DED)
-#define TEXT_LEN 32
+/**
+ * This file defines the global (hard-coded) settings for the plot trace library
+ */
 
+/**
+ * The TCP port that the Plot Relay listens on for plot client apps.
+ */
+#define DEFAULT_PLOT_RELAY_PORT ((uint16_t)18778)
+
+/**
+ * Length of the name of a curve in a graph. Affects packet size & throughput.
+ */
+#define TEXT_LEN size_t(32)
+
+/**
+ * UNIX datagram socket file system path
+ */
 #define PLOT_PIPE_PATH "/tmp/__plot_relay__"
+
+/**
+ * Structure of a single plot packet.
+ * If a curve name is empty (starts with '0x0') then that curve value is not to be considered.
+ */
 struct PlotPacket
 {
     char graph_name[TEXT_LEN];

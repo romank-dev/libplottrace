@@ -17,7 +17,7 @@ PROJECT = $(shell basename $(CURDIR))
 SRC_DIR = src
 
 SRC_RELAY_CLIENT = src/client.cpp src/PlotRelayClient.cpp
-SRC_PLOT_CLIENT = src/cv_plot_client.cpp src/CvPlotHandler.cpp src/PlotRelayClient.cpp
+SRC_PLOT_CLIENT = src/cv_plot_client.cpp src/CvPlot.cpp src/CvPlotRenderer.cpp src/PlotRelayClient.cpp
 SRC_RELAY_SERVER = src/server.cpp src/PlotRelayServer.cpp 
 SRC_PUBLISH_TESTER = src/publish_test.cpp src/PlotRelayPublisher.cpp src/PlotRelayGlobal.cpp 
 SRC_PLOT_TESTER = src/cv_plot_test.cpp src/CvPlot.cpp
@@ -37,7 +37,7 @@ DEP_RELAY_SERVER = $(OBJ_RELAY_SERVER:%.o=%.d)
 DEP_PUBLISH_TESTER = $(OBJ_PUBLISH_TESTER:%.o=%.d)
 DEP_PLOT_TESTER = $(OBJ_PLOT_TESTER:%.o=%.d)
 
-INCLUDE_DIRS = 	-Iinclude -I$(G_SRC)/libcommon/include -I$(G_SRC)/libnet/include $(INCLUDE_OPENCV)
+INCLUDE_DIRS = 	-Iinclude -I$(G_SRC)/libcommon/include -I$(G_SRC)/libnet/include -I$(G_SRC)/liblogtrace/include $(INCLUDE_OPENCV)
 
 LIBRARY_DIRS = -L$(G_BIN)
 CXXFLAGS = -fPIC -MMD $(INCLUDE_DIRS)
@@ -64,7 +64,7 @@ $(G_BIN)/$(PROJECT)/client_console: $(OBJ_RELAY_CLIENT)
 	
 $(G_BIN)/$(PROJECT)/plot_relay: $(OBJ_RELAY_SERVER)
 	@echo "\033[0;32m [LINK] $@ \033[0;0m"
-	@g++ -o $@ $^ $(LDFLAGS) $(G_LDFLAGS) -lnet
+	@g++ -o $@ $^ -lnet -llogtrace $(LDFLAGS)
 
 $(G_BIN)/$(PROJECT)/test_gui: $(OBJ_PLOT_TESTER)
 	@echo "\033[0;32m [LINK] $@ \033[0;0m"
@@ -76,7 +76,7 @@ $(G_BIN)/$(PROJECT)/test_plot_publish: $(OBJ_PUBLISH_TESTER)
 
 $(G_BIN)/libplot_relay.so: $(OBJ_LIB)
 	@echo "\033[0;32m [LINK] $@ \033[0;0m"
-	@g++ -shared -o $@ $^ $(LDFLAGS) -lnet
+	@g++ -shared -o $@ $^ -lnet $(LDFLAGS) 
 
 -include $(DEP_RELAY_CLIENT)
 -include $(DEP_PLOT_CLIENT)

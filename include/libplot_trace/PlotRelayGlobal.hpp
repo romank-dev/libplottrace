@@ -17,8 +17,17 @@ limitations under the License.
 
 #include <libplot_trace/PlotRelayPublisher.hpp>
 
+/**
+ * This external object is responsible for publishing graph data packets to an external source.
+ */
 extern PlotRelayPublisher g_plot_pub;
 
+
+/**
+ * Using the macro tricks below we create 4 signatures of TRACE_PLOT() macro.
+ * Each one receives 1,2,3 or plot measurements (name + value).
+ * All values are of the type float32, and all names are limited to 32 characters. See PlotRelayProtocol.hpp
+ */
 #define GET_MACRO(_1,_2,_3,_4,_5,_6,_7,_8,NAME,...) NAME
 #define TRACE_PLOT(graph_name, stamp, ...) GET_MACRO(__VA_ARGS__, TRACE_PLOT8, TRACE_PLOT7, TRACE_PLOT6, TRACE_PLOT5, TRACE_PLOT4, TRACE_PLOT3, TRACE_PLOT2)(graph_name, stamp, ##__VA_ARGS__)
 

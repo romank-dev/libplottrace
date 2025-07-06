@@ -13,12 +13,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include <libplot_trace/CvPlotHandler.hpp>
-#include <libplot_trace/PlotRelayClient.hpp>
-#include <libnet/Detector.hpp>
 #include <libgen.h>
 #include <thread>
 #include <cstdio>
+#include <libplot_trace/PlotRelayClient.hpp>
+#include <libplot_trace/CvPlotRenderer.hpp>
+#include <libnet/Detector.hpp>
 
 using namespace std;
 
@@ -54,7 +54,7 @@ int main(int argc, char** argv)
     int only_idx = -1;
     pair<float, float> range(0, 0);
 
-    CvPlotHandler::Theme theme = CvPlotHandler::Theme::WHITE;
+    CvPlotRenderer::Theme theme = CvPlotRenderer::Theme::WHITE;
 
     for(int i = 1; i < argc; i++)
     {
@@ -94,7 +94,7 @@ int main(int argc, char** argv)
         }
         else if (arg == "-d")
         {
-            theme = CvPlotHandler::Theme::DARK;
+            theme = CvPlotRenderer::Theme::DARK;
         }
         else if (arg == "-v")
         {
@@ -132,10 +132,10 @@ int main(int argc, char** argv)
         auto results = d.scan_and_collect(250);
         if(results.empty())
         {
-            printf("failed to auto-detect IVO\nFeel free to use plot_relay_client [IP]\n");
+            printf("failed to auto-detect server\nFeel free to use plot_relay_client [IP]\n");
             return 0;
         }
-        printf("Auto-detected IVO at %s\n", results[0].second.c_str());
+        printf("Auto-detected server at %s\n", results[0].second.c_str());
         host = results[0].second;
     }
 
@@ -157,19 +157,29 @@ int main(int argc, char** argv)
     }
     else if(verb == "-s")
     {
-        PlotRelayClient client(host, {graph});
+        std::unique_ptr<PlotRelayClient> client{new PlotRelayClient(host, {graph})};
         if (!idx.empty())
         {
             printf("%d Vs %d\n", idx[0], idx[1]);
         }
-        CvPlotHandler plot_h(graph, history);
+        CvPlotRenderer plot_h(graph, history);
         plot_h.set_theme(theme);
         bool first = true;
 
         while(1)
         {
             PlotPacket pkt;
-            client.receive_graph(pkt);
+            try
+            {
+                client->receive_graph(pkt);
+            }
+            catch(const Exception& e)
+            {
+                client.reset(new PlotRelayClient(host, {graph}));
+                first = true;
+                printf("Not receiving data...\n");
+                continue;
+            }
 
             if (first)
             {

@@ -13,43 +13,40 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include <libplot_trace/CvPlotHandler.hpp>
-#include <opencv2/plot.hpp>
-#include <opencv2/core.hpp>
-#include <opencv2/highgui.hpp>
+#include <libplot_trace/CvPlot.hpp>
+#include <libplot_trace/CvPlotRenderer.hpp>
 
 using namespace cv;
 using namespace std;
 
 
-CvPlotHandler::CvPlotHandler(string graph_name, int history_size, int rate) :
-_plot_width(600), _plot_height(400),
-_history_size(history_size),
-_rate(rate),
-_graph_name(graph_name),
-_theme(Theme::WHITE),
-_enable_stretch(false),
-_x_vs_y(false)
+CvPlotRenderer::CvPlotRenderer(string graph_name, int history_size) :
+    _plot_width(600), _plot_height(400),
+    _history_size(history_size),
+    _graph_name(graph_name),
+    _theme(Theme::WHITE),
+    _enable_stretch(false),
+    _x_vs_y(false)
 {
 
 }
 
-void CvPlotHandler::set_x_vs_y()
+void CvPlotRenderer::set_x_vs_y()
 {
     _x_vs_y = true;
 }
 
-void CvPlotHandler::set_legends(vector<string> legend_strings)
+void CvPlotRenderer::set_legends(vector<string> legend_strings)
 {
     _legend_strings = legend_strings;
 }
 
-void CvPlotHandler::set_theme(CvPlotHandler::Theme theme)
+void CvPlotRenderer::set_theme(CvPlotRenderer::Theme theme)
 {
     _theme = theme;
 }
 
-void CvPlotHandler::add_values(float time, float x1, float x2, float x3, float x4)
+void CvPlotRenderer::add_values(float time, float x1, float x2, float x3, float x4)
 {
     vector<float> y_vals;
     if (_x_vec.back() > time)
@@ -73,7 +70,7 @@ void CvPlotHandler::add_values(float time, float x1, float x2, float x3, float x
     }
 }
 
-void CvPlotHandler::generate_plot(std::pair<float, float> axis_range)
+void CvPlotRenderer::generate_plot(std::pair<float, float> axis_range)
 {
     Mat plot_result;
     int n = _x_vec.size();
@@ -100,7 +97,7 @@ void CvPlotHandler::generate_plot(std::pair<float, float> axis_range)
         plot->setMaxY(axis_range.second);
     }
 
-    if (_theme == CvPlotHandler::Theme::DARK)
+    if (_theme == CvPlotRenderer::Theme::DARK)
     {
         plot->setPlotAxisColor(Scalar(200, 200, 200));
         plot->setPlotGridColor(Scalar(155, 155, 155));
