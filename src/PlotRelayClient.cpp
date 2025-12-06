@@ -19,7 +19,7 @@ limitations under the License.
 #include <sys/un.h>
 #include <unistd.h>
 #include <sstream>
-#include <libplot_trace/PlotRelayClient.hpp>
+#include <libplottrace/PlotRelayClient.hpp>
 
 
 #define CLIENT_RECEIVE_TIMEOUT_MS 1000

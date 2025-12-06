@@ -20,7 +20,7 @@ limitations under the License.
 #include <sys/un.h>
 #include <unistd.h>
 #include <netinet/tcp.h>
-#include <libplot_trace/PlotRelayServer.hpp>
+#include <libplottrace/PlotRelayServer.hpp>
 #include "logging.hpp"
 
 using namespace std;

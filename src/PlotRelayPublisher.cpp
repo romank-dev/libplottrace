@@ -14,7 +14,7 @@ limitations under the License.
 */
 
 #include <cstring>
-#include <libplot_trace/PlotRelayPublisher.hpp>
+#include <libplottrace/PlotRelayPublisher.hpp>
 
 
 using namespace std;

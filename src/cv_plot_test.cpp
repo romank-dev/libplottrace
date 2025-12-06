@@ -14,7 +14,7 @@ limitations under the License.
 */
 
 #include <iostream>
-#include <libplot_trace/CvPlot.hpp>
+#include <libplottrace/CvPlot.hpp>
 #include <opencv2/opencv.hpp>
 #include <libcommon/libcommon.hpp>
 using namespace cv;

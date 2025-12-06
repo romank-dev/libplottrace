@@ -13,8 +13,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include <libplot_trace/CvPlot.hpp>
-#include <libplot_trace/CvPlotRenderer.hpp>
+#include <libplottrace/CvPlot.hpp>
+#include <libplottrace/CvPlotRenderer.hpp>
 
 using namespace cv;
 using namespace std;

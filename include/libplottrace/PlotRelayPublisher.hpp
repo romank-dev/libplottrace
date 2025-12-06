@@ -16,7 +16,7 @@ limitations under the License.
 #pragma once
 
 #include <libcommon/libcommon.hpp>
-#include <libplot_trace/PlotRelayProtocol.hpp>
+#include <libplottrace/PlotRelayProtocol.hpp>
 #include <libnet/libnet.hpp>
 
 /**

@@ -18,7 +18,7 @@ limitations under the License.
 #include <map>
 #include <libnet/libnet.hpp>
 #include <libcommon/libcommon.hpp>
-#include <libplot_trace/PlotRelayProtocol.hpp>
+#include <libplottrace/PlotRelayProtocol.hpp>
 
 /**
  * @class PlotRelayServer

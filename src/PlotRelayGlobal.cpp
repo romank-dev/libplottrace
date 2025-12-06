@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include <libplot_trace/PlotRelayGlobal.hpp>
-#include <libplot_trace/PlotRelayPublisher.hpp>
+#include <libplottrace/PlotRelayGlobal.hpp>
+#include <libplottrace/PlotRelayPublisher.hpp>
 
 PlotRelayPublisher g_plot_pub;

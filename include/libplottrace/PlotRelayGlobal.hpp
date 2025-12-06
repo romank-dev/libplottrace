@@ -15,7 +15,7 @@ limitations under the License.
 
 #pragma once
 
-#include <libplot_trace/PlotRelayPublisher.hpp>
+#include <libplottrace/PlotRelayPublisher.hpp>
 
 /**
  * This external object is responsible for publishing graph data packets to an external source.

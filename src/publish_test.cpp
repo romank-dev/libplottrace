@@ -18,7 +18,7 @@ limitations under the License.
 #include <thread>
 #include <cstdio>
 #include <cmath>
-#include <libplot_trace/libplot_trace.hpp>
+#include <libplottrace/libplottrace.hpp>
 
 using namespace std;
 

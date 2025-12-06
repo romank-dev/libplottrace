@@ -15,5 +15,5 @@ limitations under the License.
 
 #pragma once
 
-#define __COMPONENT__ "libplot_trace"
+#define __COMPONENT__ "libplottrace"
 #include <liblogtrace/liblogtrace.hpp>

@@ -18,7 +18,7 @@ limitations under the License.
 #include <thread>
 #include <cstdio>
 
-#include <libplot_trace/PlotRelayServer.hpp>
+#include <libplottrace/PlotRelayServer.hpp>
 
 using namespace std;
 

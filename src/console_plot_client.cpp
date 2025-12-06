@@ -18,8 +18,8 @@ limitations under the License.
 #include <thread>
 #include <iostream>
 #include <cstdio>
-#include <libplot_trace/PlotRelayClient.hpp>
-#include <libplot_trace/PlotRelayPublisher.hpp>
+#include <libplottrace/PlotRelayClient.hpp>
+#include <libplottrace/PlotRelayPublisher.hpp>
 #include <libnet/Detector.hpp>
 
 using namespace std;

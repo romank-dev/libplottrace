@@ -16,8 +16,8 @@ limitations under the License.
 #include <libgen.h>
 #include <thread>
 #include <cstdio>
-#include <libplot_trace/PlotRelayClient.hpp>
-#include <libplot_trace/CvPlotRenderer.hpp>
+#include <libplottrace/PlotRelayClient.hpp>
+#include <libplottrace/CvPlotRenderer.hpp>
 #include <libnet/Detector.hpp>
 
 using namespace std;
