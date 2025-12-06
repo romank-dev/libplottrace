@@ -27,32 +27,12 @@ using namespace std;
 using std::placeholders::_1;
 
 PlotRelayServer::PlotRelayServer() :
+    _quit_event(false, true),
+    _listener(UnixSocketAddress(PLOT_PIPE_PATH, false)),
     _server(IpSocketAddress(IpAddress::AnyAddress, DEFAULT_PLOT_RELAY_PORT), true),
-    _acceptor_thread(bind(&PlotRelayServer::tcp_server_loop, this, _1)),
-    _pipe_fd(socket(AF_UNIX, SOCK_DGRAM, 0))
+    _acceptor_thread(bind(&PlotRelayServer::tcp_server_loop, this, _1), "client_acceptor")
 {
-    CHECK_THROW_POSIX(_pipe_fd >= 0, "socket() failed!");
 
-    FileSystemPath pipe_path(PLOT_PIPE_PATH);
-    if(pipe_path.exists())
-    {
-        CHECK_THROW_POSIX(!remove(pipe_path.str().c_str()), "remove() failed");
-    }
-
-    struct sockaddr_un name;
-    name.sun_family = AF_UNIX;
-    strcpy(name.sun_path, PLOT_PIPE_PATH);
-
-    CHECK_THROW_POSIX(!bind(_pipe_fd, (struct sockaddr *) &name, sizeof(struct sockaddr_un)), "bind() failed");
-
-}
-
-PlotRelayServer::~PlotRelayServer()
-{
-    SAFE_DESTRUCTOR
-    (
-        close(_pipe_fd);
-    )
 }
 
 void PlotRelayServer::refresh_cache()
@@ -113,11 +93,19 @@ void PlotRelayServer::handle_packet(const PlotPacket& packet)
 void PlotRelayServer::run_loop()
 {
     PlotPacket packet;
-    while(true)
+    while(!_quit_event.is_signaled())
     {
         int actual_image_size;
-        int num_read;
-        CHECK_THROW_POSIX((num_read = read(_pipe_fd, &packet, sizeof(packet))) > 0, "read() failed");
+        uint16_t num_read;
+        UnixSocketAddress from;
+
+        auto wait_res = Waitable::wait_for_any(_listener.get_read_waitable(), _quit_event);
+        if(wait_res.event_idx == 1)
+            break;
+
+        if(!_listener.receive(&packet, sizeof(packet), num_read, from))
+            continue;
+
         _graphs_cache.get([&](map<string, uint32_t>& cache)
         {
             cache[string(packet.graph_name)] = _timer.get_ms();
@@ -133,6 +121,9 @@ void PlotRelayServer::tcp_server_loop(Thread& t)
 {
     while(!t.should_quit())
     {
+        auto wait_res = Waitable::wait_for_any(_server.get_read_waitable(), _quit_event);
+        if(wait_res.event_idx == 1)
+            break;
         TcpSocket::sptr client_sock = _server.accept_connection();
         static const int SMALL_TOLERANCE_FOR_SEND = 500;
         client_sock->set_send_timeout(SMALL_TOLERANCE_FOR_SEND);
@@ -210,7 +201,10 @@ uint32_t& PlotRelayServer::ClientInfo::last_send_duration()
     return _last_send_duration;
 }
 
-
+void PlotRelayServer::stop()
+{
+    _quit_event.signal();
+}
 
 
 

@@ -22,12 +22,39 @@ limitations under the License.
 
 using namespace std;
 
-int main(int argc, char** argv)
+int safe_main(int argc, char** argv)
 {
     Utils::FileSystem::set_local_cwd();
 
     PlotRelayServer server;
+    InterruptHandler ih([&server]()
+    {
+        server.stop();
+        return true;
+    });
     server.run_loop();
+
+    return 0;
+}
+
+int main(int argc, char** argv)
+{
+    try
+    {
+         return safe_main(argc, argv);
+    }
+    catch(const Exception& ex)
+    {
+        printf("Caught Exception: %s\n", ex.full_message().c_str());
+    }
+    catch(const std::exception& ex)
+    {
+        printf("Caught std::exception: %s\n", ex.what());
+    }
+    catch(...)
+    {
+        printf("Caught unknown exception\n");
+    }
 
     return 0;
 }

@@ -39,12 +39,17 @@ class PlotRelayServer final : NonCopyable
         /**
          * @brief Destroys the `PlotRelayServer` object.
          */
-        ~PlotRelayServer();
+        ~PlotRelayServer() = default;
 
         /**
          * @brief Starts the main server loop.
          */
         void run_loop();
+
+        /**
+         * @brief Stops the server loop by signalling the quit event
+         */
+        void stop();
 
     private:
         void get_image();
@@ -54,14 +59,44 @@ class PlotRelayServer final : NonCopyable
 
         static constexpr int graph_TIMEOUT_MS = 5000;
 
+    /**
+     * @class ClientInfo
+     * @brief Holds information about a connected client.
+     * This class is managed by the `PlotRelayServer` to keep track of each client's
+     * socket, requested graphs, and last send times.
+     */
     class ClientInfo
     {
         public:
+            /**
+             * @brief Constructs a `ClientInfo` object.
+             * @param socket The TCP socket associated with the client.
+             * @param graphs The list of graph names requested by the client.
+             */
             ClientInfo(const TcpSocket::sptr& socket, const std::vector<std::string>& graphs);
 
+            /**
+             * @brief Gets the TCP socket associated with the client.
+             * @return A reference to the client's TCP socket.
+             */
             TcpSocket::sptr& socket();
+
+            /**
+             * @brief Gets the list of graph names requested by the client.
+             * @return A reference to the vector of requested graph names.
+             */
             std::vector<std::string>& requested_graphs();
+
+            /**
+             * @brief Gets the last send time for the client.
+             * @return A reference to the last send time in milliseconds.
+             */
             uint32_t& last_send_time();
+
+            /**
+             * @brief Gets the last send duration for the client.
+             * @return A reference to the last send duration in milliseconds.
+             */
             uint32_t& last_send_duration();
 
         private:
@@ -72,8 +107,9 @@ class PlotRelayServer final : NonCopyable
     };
 
     private:
+        Event                                       _quit_event;
         Stopwatch                                   _timer;
-        int                                         _pipe_fd;
+        UnixDatagramSocket                          _listener;
         ThreadSafe<std::vector<ClientInfo>>         _clients;
         TcpServerSocket                             _server;
         ThreadSafe<std::map<std::string, uint32_t>> _graphs_cache; // name -> time

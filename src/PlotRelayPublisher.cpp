@@ -13,21 +13,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include <sys/socket.h>
-#include <sys/types.h>
 #include <cstring>
-#include <sys/un.h>
-#include <unistd.h>
 #include <libplot_trace/PlotRelayPublisher.hpp>
 
 
 using namespace std;
 
 PlotRelayPublisher::PlotRelayPublisher() :
-    _fd(socket(AF_UNIX, SOCK_DGRAM, 0))
-{
-    CHECK_THROW_POSIX(_fd >= 0, "socket() failed!");
-}
+    _client()
+{}
 
 void PlotRelayPublisher::publish(const char* graph_name, size_t graph_name_len, float stamp, const char* curve_1, size_t curve_1_len, float value_1, const char* curve_2, size_t curve_2_len, float value_2, const char* curve_3, size_t curve_3_len, float value_3)
 {
@@ -46,10 +40,6 @@ void PlotRelayPublisher::publish(const char* graph_name, size_t graph_name_len, 
 
 void PlotRelayPublisher::publish(const char* graph_name, size_t graph_name_len, float stamp, const char* curve_1, size_t curve_1_len, float value_1, const char* curve_2, size_t curve_2_len, float value_2, const char* curve_3, size_t curve_3_len, float value_3, const char* curve_4, size_t curve_4_len, float value_4)
 {
-    struct sockaddr_un name;
-    name.sun_family = AF_UNIX;
-    strcpy(name.sun_path, PLOT_PIPE_PATH);
-
     PlotPacket payload_packet {};
     BufferWriter payload_writer(&payload_packet, sizeof(payload_packet));
 
@@ -93,14 +83,6 @@ void PlotRelayPublisher::publish(const char* graph_name, size_t graph_name_len, 
     else payload_writer.skip(TEXT_LEN + sizeof(float));
 
 
-    sendto(_fd, &payload_packet, sizeof(payload_packet), 0, (struct sockaddr*)&name, sizeof(struct sockaddr_un));
-}
-
-PlotRelayPublisher::~PlotRelayPublisher()
-{
-    SAFE_DESTRUCTOR
-    (
-        close(_fd);
-    )
+    _client.send(&payload_packet, sizeof(payload_packet), UnixSocketAddress(PLOT_PIPE_PATH, false));
 }
 

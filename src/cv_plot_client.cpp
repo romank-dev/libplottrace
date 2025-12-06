@@ -22,9 +22,9 @@ limitations under the License.
 
 using namespace std;
 
-void usage()
+void usage(const char* prog_name)
 {
-    printf("USAGE: cv_plot_client [OPTIONS]\n"\
+    printf("USAGE: %s [OPTIONS]\n"\
             "\t-h\tspecify host (don't use detector)\n" \
             "\t-q\tquery available plots\n" \
             "\t-s [G]\t show single graph with name G\n" \
@@ -33,16 +33,16 @@ void usage()
             "\t-v [idx_1, idx_2] \tshow for example x_loc vs y_loc\n" \
             "\t-l [history-amount] \t\thow many values to keep[default 1000 samples]\n" \
             "\t-f [index] \t\tDefine which index to show\n" \
-            "\t-r [y1 y2] \t\tDefine the range values of the y-axis between y1 and y2\n");
+            "\t-r [y1 y2] \t\tDefine the range values of the y-axis between y1 and y2\n", prog_name);
 }
 
-int main(int argc, char** argv)
+int safe_main(int argc, char** argv)
 {
     Utils::FileSystem::set_local_cwd();
 
     if(argc < 2)
     {
-        usage();
+        usage(argv[0]);
         return 0;
     }
 
@@ -115,7 +115,7 @@ int main(int argc, char** argv)
             only_idx = atoi(argv[++i]);
             if (only_idx > 3)
             {
-                usage();
+                usage(argv[0]);
                 return 0;
             }
         }
@@ -275,7 +275,30 @@ int main(int argc, char** argv)
             plot_h.generate_plot(range);
         }
     }
-    else usage();
+    else usage(argv[0]);
+
+    return 0;
+}
+
+
+int main(int argc, char** argv)
+{
+    try
+    {
+         return safe_main(argc, argv);
+    }
+    catch(const Exception& ex)
+    {
+        printf("Caught Exception: %s\n", ex.full_message().c_str());
+    }
+    catch(const std::exception& ex)
+    {
+        printf("Caught std::exception: %s\n", ex.what());
+    }
+    catch(...)
+    {
+        printf("Caught unknown exception\n");
+    }
 
     return 0;
 }

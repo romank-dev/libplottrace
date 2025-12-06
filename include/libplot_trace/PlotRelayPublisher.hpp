@@ -17,6 +17,7 @@ limitations under the License.
 
 #include <libcommon/libcommon.hpp>
 #include <libplot_trace/PlotRelayProtocol.hpp>
+#include <libnet/libnet.hpp>
 
 /**
  * @class PlotRelayPublisher
@@ -29,7 +30,7 @@ class PlotRelayPublisher final : NonCopyable
 {
     public:
         PlotRelayPublisher();
-        ~PlotRelayPublisher();
+        ~PlotRelayPublisher() = default;
 
         void publish(const char* graph_name, size_t graph_name_len, float stamp, const char* curve_1, size_t curve_1_len, float value_1);
         void publish(const char* graph_name, size_t graph_name_len, float stamp, const char* curve_1, size_t curve_1_len, float value_1, const char* curve_2, size_t curve_2_len, float value_2);
@@ -37,5 +38,5 @@ class PlotRelayPublisher final : NonCopyable
         void publish(const char* graph_name, size_t graph_name_len, float stamp, const char* curve_1, size_t curve_1_len, float value_1, const char* curve_2, size_t curve_2_len, float value_2, const char* curve_3, size_t curve_3_len, float value_3, const char* curve_4, size_t curve_4_len, float value_4);
 
     private:
-        int     _fd;
+        UnixDatagramSocket  _client;
 };

@@ -37,7 +37,7 @@ int PlotGraph(Mat & x, Mat& y) {
     return 0;
 }
 
-int main()
+int safe_main(int argc, char** argv)
 {
     Stopwatch t;
     while (t.get_ms() < 20000)
@@ -55,5 +55,27 @@ int main()
 //        std::this_thread::sleep_for(chrono::milliseconds(10));
 //        printf("fdasdf\n");
     }
+    return 0;
+}
+
+int main(int argc, char** argv)
+{
+    try
+    {
+         return safe_main(argc, argv);
+    }
+    catch(const ::Exception& ex)
+    {
+        printf("Caught Exception: %s\n", ex.full_message().c_str());
+    }
+    catch(const std::exception& ex)
+    {
+        printf("Caught std::exception: %s\n", ex.what());
+    }
+    catch(...)
+    {
+        printf("Caught unknown exception\n");
+    }
+
     return 0;
 }
