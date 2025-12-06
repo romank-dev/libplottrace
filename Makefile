@@ -23,15 +23,15 @@ SRC_PUBLISH_TESTER = src/publish_test.cpp src/PlotRelayPublisher.cpp src/PlotRel
 SRC_PLOT_TESTER = src/cv_plot_test.cpp src/CvPlot.cpp
 SRC_LIB = src/PlotRelayGlobal.cpp src/PlotRelayPublisher.cpp src/PlotRelayClient.cpp
 
-OBJ_CONSOLE_RELAY_CLIENT = $(SRC_RELAY_CLIENT:$(SRC_DIR)/%.cpp=$(G_OBJ)/$(PROJECT)/%.o)
-OBJ_GUI_RELAY_CLIENT = $(SRC_PLOT_CLIENT:$(SRC_DIR)/%.cpp=$(G_OBJ)/$(PROJECT)/%.o)
+OBJ_CONSOLE_RELAY_CLIENT = $(SRC_CONSOLE_RELAY_CLIENT:$(SRC_DIR)/%.cpp=$(G_OBJ)/$(PROJECT)/%.o)
+OBJ_GUI_RELAY_CLIENT = $(SRC_GUI_RELAY_CLIENT:$(SRC_DIR)/%.cpp=$(G_OBJ)/$(PROJECT)/%.o)
 OBJ_RELAY_SERVER = $(SRC_RELAY_SERVER:$(SRC_DIR)/%.cpp=$(G_OBJ)/$(PROJECT)/%.o)
 OBJ_PUBLISH_TESTER = $(SRC_PUBLISH_TESTER:$(SRC_DIR)/%.cpp=$(G_OBJ)/$(PROJECT)/%.o)
 OBJ_PLOT_TESTER = $(SRC_PLOT_TESTER:$(SRC_DIR)/%.cpp=$(G_OBJ)/$(PROJECT)/%.o)
 OBJ_LIB = $(SRC_LIB:$(SRC_DIR)/%.cpp=$(G_OBJ)/$(PROJECT)/%.o)
 
-DEP_CONSOLE_RELAY_CLIENT = $(OBJ_RELAY_CLIENT:%.o=%.d)
-DEP_GUI_RELAY_CLIENT = $(OBJ_PLOT_CLIENT:%.o=%.d)
+DEP_CONSOLE_RELAY_CLIENT = $(OBJ_CONSOLE_RELAY_CLIENT:%.o=%.d)
+DEP_GUI_RELAY_CLIENT = $(OBJ_GUI_RELAY_CLIENT:%.o=%.d)
 DEP_LIB = $(OBJ_LIB:%.o=%.d)
 DEP_RELAY_SERVER = $(OBJ_RELAY_SERVER:%.o=%.d)
 DEP_PUBLISH_TESTER = $(OBJ_PUBLISH_TESTER:%.o=%.d)
@@ -54,7 +54,7 @@ all: $(G_BIN)/$(PROJECT)/plot_relay $(G_BIN)/$(PROJECT)/test_plot_publish $(G_BI
 	@echo "\033[0;97m [DONE] $(PROJECT) (OpenCV not installed - skipping UI)"
 endif
 
-$(G_BIN)/$(PROJECT)/client_gui: $(SRC_GUI_RELAY_CLIENT)
+$(G_BIN)/$(PROJECT)/client_gui: $(OBJ_GUI_RELAY_CLIENT)
 	@echo "\033[0;32m [LINK] $@ \033[0;0m"
 	@g++ -o $@ $^ $(LDFLAGS) $(G_LDFLAGS) $(LDFLAGS_OPENCV) -lnet
 	
