@@ -1,0 +1,7 @@
+r:git@github.com:romank-dev/libcommon
+r:git@github.com:romank-dev/liblogtrace
+r:git@github.com:romank-dev/libnet
+r:git@github.com:romank-dev/libplottrace
+d:libplottrace:libcommon libnet liblogtrace
+d:libcommon:liblogtrace
+d:libnet:libcommon liblogtrace
