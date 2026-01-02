@@ -22,9 +22,9 @@ Here is an example of an application submitting numeric data:<br/>
 ```
 float speed_gps, speed_vo;
 ...
-TRACE_PLOT("speed_graph", time_stamp++, "spd_gps", speed_gps, "spd_vo", speed_vo);
+TRACE_PLOT("speed_graph", time_stamp++, "gps", speed_gps, "vo", speed_vo);
 ```
-This code will submit the values speed_gps and speed_vo to the curves "spd_gps" and "spd_vo" in the graph "speed_graph".
+This code will submit the values speed_gps and speed_vo to the curves "gps" and "vo" in the graph "speed_graph".
 In the future there should be support for extra metadata for different kinds of graphs, etc.<br/>
 A GUI visualizer may visualize the data in a convenient way:<br/>
 <img width="350" height="234" alt="Screenshot from 2026-01-02 19-04-30" src="https://github.com/user-attachments/assets/28c68f95-4f75-4caf-8ba4-2c368b5ea046" />
