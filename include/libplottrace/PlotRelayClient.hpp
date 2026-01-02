@@ -29,7 +29,9 @@ class PlotRelayClient final : NonCopyable
 {
     public:
         /**
-         * @brief Constructs a PlotRelayClient instance.
+         * @brief Constructor.
+         * Creates a PlotRelayClient and connects to the specified Plot Relay server.
+         * During construction, it performs a handshake and receives the list of available graphs.
          *
          * @param target_ip The IP address of the target Plot Relay server.
          * @param topics A list of topics to subscribe to.
