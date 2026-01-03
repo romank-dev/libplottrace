@@ -7,7 +7,7 @@ I have developed a logging solution tailored specifically towards frequently cha
 This platform makes it easy to consume the numeric data and process it, or plot it on a graph (hence the name).
 
 ## Building
-* **liblogtrace** is built using the [workspace](https://github.com/romank-dev/workspace) build system. 
+* **libplottrace** is built using the [workspace](https://github.com/romank-dev/workspace) build system. 
 **For building with a different system, see [this link](https://github.com/romank-dev/workspace?tab=readme-ov-file#deep-dive--building-projects-without-workspace).**
 * The manifest [URL](manifest.txt) may be used by the Workspace **init.sh** script to pull this project and it's dependencies.
 ## Overview
